@@ -22,7 +22,7 @@ function App() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (isLogin) {
-			console.log("Login attempt:", {
+			console.log("Login attempt: ", {
 				email: formData.email,
 				password: formData.password,
 			});
