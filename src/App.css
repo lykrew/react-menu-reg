@@ -230,6 +230,13 @@ body {
 	color: rgba(255, 255, 255, 0.3);
 }
 
+.image-fallback {
+	font-size: 1.25rem;
+	color: rgba(255, 255, 255, 0.35);
+	padding: 0 1rem;
+	text-align: center;
+}
+
 .gallery-item h3 {
 	padding: 1.5rem 1.5rem 0.5rem;
 	color: #f3f4f6;
