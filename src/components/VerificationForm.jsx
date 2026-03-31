@@ -1,3 +1,5 @@
+import CodeInput from "./CodeInput";
+
 const VerificationForm = ({
 	loading,
 	error,
@@ -17,15 +19,13 @@ const VerificationForm = ({
 		<form onSubmit={onVerify}>
 			<div className="form-group">
 				<label htmlFor="verificationCode">Код подтверждения</label>
-				<input
-					type="text"
-					id="verificationCode"
-					name="verificationCode"
+				<CodeInput
 					value={formData.verificationCode}
-					onChange={onInputChange}
-					required
-					placeholder="Введите код"
-					maxLength={6}
+					onChange={(code) =>
+						onInputChange({
+							target: { name: "verificationCode", value: code },
+						})
+					}
 					disabled={loading}
 				/>
 			</div>
