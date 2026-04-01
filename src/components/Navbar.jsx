@@ -1,19 +1,40 @@
-const Navbar = ({ onLoginClick }) => (
+const Navbar = ({
+	onLoginClick,
+	onLogoutClick,
+	onNavigate,
+	activePage,
+	isLoggedIn,
+	userName,
+}) => (
 	<nav className="navbar">
 		<div className="logo">PhotoGallery</div>
 		<div className="nav-buttons">
 			<button
-				className="nav-btn"
-				onClick={() => alert("Галерея загружается...")}
+				className={`nav-btn ${activePage === "content" ? "nav-btn-active" : ""}`}
+				onClick={() => onNavigate("content")}
 			>
 				Галерея
 			</button>
-			<button className="nav-btn" onClick={() => alert("О нас...")}>
-				О нас
-			</button>
-			<button className="nav-btn login-btn" onClick={onLoginClick}>
-				Войти
-			</button>
+			{isLoggedIn && (
+				<button
+					className={`nav-btn ${activePage === "profile" ? "nav-btn-active" : ""}`}
+					onClick={() => onNavigate("profile")}
+				>
+					Профиль
+				</button>
+			)}
+			{isLoggedIn ? (
+				<>
+					<span className="nav-user">Привет, {userName}</span>
+					<button className="nav-btn login-btn" onClick={onLogoutClick}>
+						Выйти
+					</button>
+				</>
+			) : (
+				<button className="nav-btn login-btn" onClick={onLoginClick}>
+					Войти
+				</button>
+			)}
 		</div>
 	</nav>
 );

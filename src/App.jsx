@@ -1,119 +1,81 @@
-import { useState } from "react";
-import { loginApi, verifyCodeApi } from "./api/autentiphication";
+import { useEffect } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Gallery from "./components/Gallery";
 import Footer from "./components/Footer";
 import AuthModal from "./components/AuthModal";
+import Profile from "./components/Profile";
 import { galleryItems } from "./data/galleryItems";
+import { useAppStore } from "./store/useAppStore";
 
 function App() {
-	const initialFormData = {
-		email: "",
-		password: "",
-		confirmPassword: "",
-		name: "",
-		verificationCode: "",
-	};
+	const {
+		showAuth,
+		isLogin,
+		showVerification,
+		loading,
+		error,
+		activePage,
+		currentUser,
+		formData,
+		initializeSession,
+		openAuth,
+		closeAuth,
+		setFormField,
+		submitAuth,
+		verifyCodeAndRegister,
+		toggleAuthMode,
+		backFromVerification,
+		logout,
+		setActivePage,
+		addGalleryPhoto,
+		changeName,
+		addLocalPhoto,
+	} = useAppStore();
 
-	const [showAuth, setShowAuth] = useState(false);
-	const [isLogin, setIsLogin] = useState(true);
-	const [showVerification, setShowVerification] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const [formData, setFormData] = useState({
-		...initialFormData,
-	});
-
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-		setError("");
-	};
+	useEffect(() => {
+		initializeSession();
+	}, [initializeSession]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setLoading(true);
-		setError("");
-
-		try {
-			if (isLogin) {
-				await loginApi({
-					email: formData.email,
-					password: formData.password,
-				});
-
-				alert(`Добро пожаловать, ${formData.email}!`);
-				closeAuth();
-			} else {
-				if (formData.password !== formData.confirmPassword) {
-					setError("Пароли не совпадают!");
-					return;
-				}
-
-				setShowVerification(true);
-			}
-		} catch (err) {
-			const status = err?.status;
-			const errorMessages = {
-				403: "Пользователь заблокирован",
-				401: "Неправильный email или пароль",
-				500: "Ошибка сервера, попробуйте позже",
-				0: "Ошибка сети, проверьте подключение",
-			};
-
-			setError(errorMessages[status] ?? "Произошла ошибка, попробуйте снова");
-		} finally {
-			setLoading(false);
-		}
+		await submitAuth();
 	};
 
 	const handleVerifyCode = async (e) => {
 		e.preventDefault();
-		setLoading(true);
-		setError("");
-
-		try {
-			await verifyCodeApi({ code: formData.verificationCode });
-
-			alert(`Регистрация успешна, ${formData.name || formData.email}!`);
-			closeAuth();
-		} catch (err) {
-			if (err.status === 400) {
-				setError("Неверный код подтверждения");
-			} else {
-				setError("Ошибка при проверке кода");
-			}
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const closeAuth = () => {
-		setShowAuth(false);
-		setShowVerification(false);
-		setError("");
-
-		setFormData({ ...initialFormData });
-	};
-
-	const toggleAuthMode = () => {
-		setIsLogin(!isLogin);
-		setShowVerification(false);
-		setError("");
-
-		setFormData({ ...initialFormData });
+		await verifyCodeAndRegister();
 	};
 
 	return (
 		<div className="app">
-			<Navbar onLoginClick={() => setShowAuth(true)} />
-			<Hero />
-			<Gallery items={galleryItems} />
+			<Navbar
+				onLoginClick={openAuth}
+				onLogoutClick={logout}
+				onNavigate={setActivePage}
+				activePage={activePage}
+				isLoggedIn={Boolean(currentUser)}
+				userName={currentUser?.name}
+			/>
+			{activePage === "content" && (
+				<>
+					<Hero />
+					<Gallery
+						items={galleryItems}
+						onAddPhoto={addGalleryPhoto}
+						isLoggedIn={Boolean(currentUser)}
+					/>
+				</>
+			)}
+			{activePage === "profile" && currentUser && (
+				<Profile
+					user={currentUser}
+					onChangeName={changeName}
+					onUploadPhoto={addLocalPhoto}
+					loading={loading}
+				/>
+			)}
 			<Footer />
 			{showAuth && (
 				<AuthModal
@@ -122,12 +84,12 @@ function App() {
 					loading={loading}
 					error={error}
 					formData={formData}
-					onInputChange={handleInputChange}
+					onInputChange={(e) => setFormField(e.target.name, e.target.value)}
 					onSubmit={handleSubmit}
 					onVerify={handleVerifyCode}
 					onClose={closeAuth}
 					onToggleMode={toggleAuthMode}
-					onBack={() => setShowVerification(false)}
+					onBack={backFromVerification}
 				/>
 			)}
 		</div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const GalleryItem = ({ item }) => {
+const GalleryItem = ({ item, onAddPhoto, isLoggedIn }) => {
 	const [imageError, setImageError] = useState(false);
 
 	return (
@@ -18,16 +18,29 @@ const GalleryItem = ({ item }) => {
 			</div>
 			<h3>{item.title}</h3>
 			<p>{item.description}</p>
+			<button
+				className="add-photo-btn"
+				onClick={() => onAddPhoto?.(item)}
+				disabled={!isLoggedIn}
+				title={isLoggedIn ? "Добавить в профиль" : "Сначала войдите в аккаунт"}
+			>
+				Добавить в профиль
+			</button>
 		</div>
 	);
 };
 
-const Gallery = ({ items }) => (
+const Gallery = ({ items, onAddPhoto, isLoggedIn }) => (
 	<section className="gallery">
 		<h2>Популярные работы</h2>
 		<div className="gallery-grid">
 			{items.map((item) => (
-				<GalleryItem key={item.id} item={item} />
+				<GalleryItem
+					key={item.id}
+					item={item}
+					onAddPhoto={onAddPhoto}
+					isLoggedIn={isLoggedIn}
+				/>
 			))}
 		</div>
 	</section>

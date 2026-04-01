@@ -1,49 +1,118 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-export default function Profile() {
-    const [name, setName] = useState("");
-    const [newName, setNewName] = useState("");
-    const [posts, setPosts] = useState([]);
+export default function Profile({ user, onChangeName, onUploadPhoto, loading }) {
+	const MAX_FILE_SIZE = 5 * 1024 * 1024;
+	const [newName, setNewName] = useState("");
+	const [uploadTitle, setUploadTitle] = useState("");
+	const [selectedFile, setSelectedFile] = useState(null);
+	const [error, setError] = useState("");
 
-    useEffect(() => {
-        const savedName = localStorage.getItem("name");
-        const savedPosts = JSON.parse(localStorage.getItem("posts"));
+	const handleChangeName = async () => {
+		if (!newName.trim()) {
+			setError("Введите новое имя");
+			return;
+		}
+		setError("");
+		await onChangeName(newName);
+		setNewName("");
+	};
 
-        if (savedName) setName(savedName);
-        else setName("Иван");
+	const handleFileSelect = (e) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
 
-        if (savedPosts) setPosts(savedPosts);
-        else setPosts(["Пост 1", "Пост 2"]);
-    }, []);
+		if (!file.type.startsWith("image/")) {
+			setError("Можно выбрать только изображение");
+			return;
+		}
+		if (file.size > MAX_FILE_SIZE) {
+			setError("Размер файла должен быть не больше 5MB");
+			return;
+		}
 
-    useEffect(() => {
-        localStorage.setItem("name", name);
-        localStorage.setItem("posts", JSON.stringify(posts));
-    }, [name, posts]);
+		setError("");
+		setSelectedFile(file);
+		if (!uploadTitle.trim()) {
+			const cleanName = file.name.replace(/\.[^/.]+$/, "");
+			setUploadTitle(cleanName);
+		}
+	};
 
-    const handleChangeName = () => {
-        if (!newName.trim()) return;
-        setName(newName);
-        setNewName("");
-    };
+	const handleUpload = async () => {
+		if (!selectedFile) {
+			setError("Сначала выберите фото");
+			return;
+		}
 
-    return (
-        <div>
-            <h2>{name}</h2>
+		const reader = new FileReader();
+		reader.onloadend = async () => {
+			try {
+				await onUploadPhoto({
+					imageUrl: reader.result,
+					title: uploadTitle,
+				});
+				setSelectedFile(null);
+				setUploadTitle("");
+				setError("");
+			} catch {
+				setError("Не удалось загрузить фото");
+			}
+		};
+		reader.readAsDataURL(selectedFile);
+	};
 
-            <input
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-            />
-            <button onClick={handleChangeName}>
-                Сменить имя
-            </button>
+	return (
+		<section className="profile-page">
+			<div className="profile-card">
+				<h2>{user.name}</h2>
+				<p className="profile-email">{user.email}</p>
+				<div className="profile-edit">
+					<input
+						value={newName}
+						onChange={(e) => setNewName(e.target.value)}
+						placeholder="Новое имя"
+						disabled={loading}
+					/>
+					<button onClick={handleChangeName} disabled={loading}>
+						Сменить имя
+					</button>
+				</div>
+				{error && <div className="error-message">{error}</div>}
+			</div>
 
-            <ul>
-                {posts.map((post, i) => (
-                    <li key={i}>{post}</li>
-                ))}
-            </ul>
-        </div>
-    );
+			<div className="profile-photos">
+				<h3>Мои фотографии</h3>
+				<div className="profile-upload">
+					<input
+						type="file"
+						accept="image/*"
+						onChange={handleFileSelect}
+						disabled={loading}
+					/>
+					<input
+						type="text"
+						value={uploadTitle}
+						onChange={(e) => setUploadTitle(e.target.value)}
+						placeholder="Название фото"
+						disabled={loading}
+					/>
+					<button onClick={handleUpload} disabled={loading}>
+						Загрузить с компьютера
+					</button>
+				</div>
+				{user.photos.length === 0 ? (
+					<p className="profile-empty">Вы пока ничего не добавили</p>
+				) : (
+					<div className="profile-photos-grid">
+						{user.photos.map((photo) => (
+							<div key={photo.id} className="profile-photo-item">
+								<img src={photo.imageUrl} alt={photo.title} />
+								<p>{photo.title}</p>
+							</div>
+						))}
+					</div>
+				)}
+			</div>
+		</section>
+	);
 }
