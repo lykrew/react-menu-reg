@@ -8,6 +8,10 @@ import AuthModal from "./components/AuthModal";
 import Profile from "./components/Profile";
 import { galleryItems } from "./data/galleryItems";
 import { useAppStore } from "./store/useAppStore";
+import {
+	initSocketConnection,
+	closeSocketConnection,
+} from "./socket/initSocket";
 
 function App() {
 	const {
@@ -37,6 +41,11 @@ function App() {
 	useEffect(() => {
 		initializeSession();
 	}, [initializeSession]);
+
+	useEffect(() => {
+		initSocketConnection();
+		return () => closeSocketConnection();
+	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

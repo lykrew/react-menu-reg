@@ -25,6 +25,8 @@ export const useAppStore = create((set, get) => ({
 	error: "",
 	activePage: "content",
 	currentUser: null,
+	socketConnected: false,
+	socketError: "",
 	formData: { ...initialFormData },
 
 	initializeSession: async () => {
@@ -196,5 +198,16 @@ export const useAppStore = create((set, get) => ({
 		} catch {
 			set({ error: "Не удалось загрузить фото" });
 		}
+	},
+
+	// Updates coming from socket.io (if server is running).
+	setSocketConnected: (connected) => set({ socketConnected: connected }),
+	setSocketError: (error) => set({ socketError: error ?? "" }),
+	setCurrentUser: (user) => set({ currentUser: user }),
+
+	// Used by socket events. Keeps existing app flow in sync.
+	socketLogout: async () => {
+		await logoutApi();
+		set({ currentUser: null, activePage: "content", showAuth: false });
 	},
 }));
