@@ -770,7 +770,7 @@ input:disabled {
 	background: rgba(139, 92, 246, 0.12);
 }
 
-/* Theme refresh overrides */
+
 body {
 	background: linear-gradient(135deg, #0b1220 0%, #122033 55%, #0c1829 100%);
 }
@@ -982,7 +982,7 @@ body {
 	}
 }
 
-/* Full redesign */
+
 :root {
 	--bg-1: #061018;
 	--bg-2: #0a1a2a;
@@ -1442,7 +1442,7 @@ body {
 	}
 }
 
-/* Final visual polish */
+
 :root {
 	--glow-cyan: 0 0 0 1px rgba(34, 211, 238, 0.25), 0 12px 32px -20px rgba(34, 211, 238, 0.7);
 	--soft-shadow: 0 22px 38px -26px rgba(0, 0, 0, 0.9);
@@ -1627,7 +1627,7 @@ body {
 	}
 }
 
-/* Profile card text overflow fix */
+
 .profile-photo-meta {
 	min-width: 0;
 }
@@ -1645,7 +1645,7 @@ body {
 	white-space: nowrap;
 }
 
-/* Extra beauty pass */
+
 :root {
 	--glass-bg: linear-gradient(
 		160deg,
@@ -1770,4 +1770,28 @@ body {
 	inset: 0;
 	background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.08), transparent);
 	pointer-events: none;
+}
+
+
+.gallery-grid {
+	align-items: stretch;
+}
+
+.gallery-item {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.gallery-item h3 {
+	min-height: 2.6rem;
+}
+
+.gallery-item p {
+	flex: 1;
+	margin-bottom: 0.35rem;
+}
+
+.gallery-item .secondary-btn {
+	margin-top: auto;
 }
