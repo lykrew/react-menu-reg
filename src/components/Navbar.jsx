@@ -1,8 +1,9 @@
 const Navbar = ({
 	onLoginClick,
 	onLogoutClick,
-	onNavigate,
-	activePage,
+	onGalleryClick,
+	onProfileClick,
+	currentPath,
 	isLoggedIn,
 	userName,
 }) => (
@@ -10,15 +11,15 @@ const Navbar = ({
 		<div className="logo">PhotoGallery</div>
 		<div className="nav-buttons">
 			<button
-				className={`nav-btn ${activePage === "content" ? "nav-btn-active" : ""}`}
-				onClick={() => onNavigate("content")}
+				className={`nav-btn ${currentPath === "/" ? "nav-btn-active" : ""}`}
+				onClick={onGalleryClick}
 			>
 				Галерея
 			</button>
 			{isLoggedIn && (
 				<button
-					className={`nav-btn ${activePage === "profile" ? "nav-btn-active" : ""}`}
-					onClick={() => onNavigate("profile")}
+					className={`nav-btn ${currentPath === "/profile" ? "nav-btn-active" : ""}`}
+					onClick={onProfileClick}
 				>
 					Профиль
 				</button>

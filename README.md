@@ -1,16 +1,61 @@
-# React + Vite
+# PhotoGallery App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Клиентское веб-приложение на React с авторизацией, страницей профиля, галереей и детальной страницей фото.
 
-Currently, two official plugins are available:
+## Что реализовано
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Главная страница с галереей
+- Детальная страница фото
+- Страница профиля пользователя
+- UI авторизации и регистрации с подтверждением кода
+- Мокированные API-запросы с асинхронной обработкой
+- Состояния загрузки и ошибок
+- Глобальное состояние через Zustand
+- Навигация через React Router
+- Адаптивная верстка (desktop/tablet/mobile)
+- Локальное хранение данных в localStorage
 
-## React Compiler
+## Технологии
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React (функциональные компоненты)
+- JavaScript (ES6+)
+- HTML5, CSS3
+- React Router
+- Zustand
+- Vite
 
-## Expanding the ESLint configuration
+## Запуск проекта
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+Сборка production-версии:
+
+```bash
+npm run build
+```
+
+## Основные сценарии
+
+1. Открыть главную страницу и просмотреть карточки в галерее.
+2. Перейти в детальную страницу фото по кнопке "Подробнее".
+3. Войти или зарегистрироваться через модальное окно.
+4. Перейти в профиль, сменить имя и загрузить свое фото.
+5. Добавить фото из галереи в профиль.
+
+## Структура
+
+```text
+src/
+  api/
+  components/
+  data/
+  socket/
+  store/
+```
+
+## Примечание
+
+Проект использует мок-данные и localStorage вместо реального backend API.

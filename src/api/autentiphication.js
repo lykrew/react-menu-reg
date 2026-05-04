@@ -149,3 +149,16 @@ export async function addPhotoToProfileApi(payload) {
 
 	return { success: true, user: publicUser(user) };
 }
+
+export async function removePhotoFromProfileApi(payload) {
+	await delay(250);
+	const { userId, photoId } = payload;
+	const users = readUsers();
+	const user = users.find((item) => item.id === userId);
+	if (!user) throw { status: 404, message: "User not found" };
+
+	user.photos = user.photos.filter((item) => item.id !== photoId);
+	writeUsers(users);
+
+	return { success: true, user: publicUser(user) };
+}

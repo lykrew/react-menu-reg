@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-export default function Profile({ user, onChangeName, onUploadPhoto, loading }) {
+export default function Profile({
+	user,
+	onChangeName,
+	onUploadPhoto,
+	onRemovePhoto,
+	loading,
+}) {
 	const MAX_FILE_SIZE = 5 * 1024 * 1024;
 	const [newName, setNewName] = useState("");
 	const [uploadTitle, setUploadTitle] = useState("");
@@ -107,7 +113,16 @@ export default function Profile({ user, onChangeName, onUploadPhoto, loading }) 
 						{user.photos.map((photo) => (
 							<div key={photo.id} className="profile-photo-item">
 								<img src={photo.imageUrl} alt={photo.title} />
-								<p>{photo.title}</p>
+								<div className="profile-photo-meta">
+									<p>{photo.title}</p>
+									<button
+										className="photo-delete-btn"
+										onClick={() => onRemovePhoto(photo.id)}
+										disabled={loading}
+									>
+										Удалить
+									</button>
+								</div>
 							</div>
 						))}
 					</div>

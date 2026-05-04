@@ -4,6 +4,7 @@ import {
 	getCurrentUserApi,
 	loginApi,
 	logoutApi,
+	removePhotoFromProfileApi,
 	registerApi,
 	updateProfileNameApi,
 	verifyCodeApi,
@@ -161,22 +162,30 @@ export const useAppStore = create((set, get) => ({
 		const { currentUser } = get();
 		if (!currentUser) {
 			set({ showAuth: true });
-			return;
+			return { success: false, reason: "auth" };
+		}
+
+		const photoId = `gallery-${item.id}`;
+		const alreadyAdded = currentUser.photos.some((photo) => photo.id === photoId);
+		if (alreadyAdded) {
+			return { success: false, reason: "exists" };
 		}
 
 		try {
 			const response = await addPhotoToProfileApi({
 				userId: currentUser.id,
 				photo: {
-					id: `gallery-${item.id}`,
+					id: photoId,
 					title: item.title,
 					description: item.description,
 					imageUrl: item.imageUrl,
 				},
 			});
 			set({ currentUser: response.user, error: "" });
+			return { success: true };
 		} catch {
 			set({ error: "Не удалось добавить фото в профиль" });
+			return { success: false, reason: "error" };
 		}
 	},
 
@@ -197,6 +206,21 @@ export const useAppStore = create((set, get) => ({
 			set({ currentUser: response.user, error: "" });
 		} catch {
 			set({ error: "Не удалось загрузить фото" });
+		}
+	},
+
+	removeProfilePhoto: async (photoId) => {
+		const { currentUser } = get();
+		if (!currentUser) return;
+
+		try {
+			const response = await removePhotoFromProfileApi({
+				userId: currentUser.id,
+				photoId,
+			});
+			set({ currentUser: response.user, error: "" });
+		} catch {
+			set({ error: "Не удалось удалить фото" });
 		}
 	},
 
