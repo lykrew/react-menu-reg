@@ -2,7 +2,7 @@
 
 A React-based web application featuring authentication, a profile page, a gallery, and a detailed photo view.
 
-## Features Implemented
+## Features
 
 - Home page with a gallery
 - Detailed photo view
@@ -36,14 +36,6 @@ Building the production version:
 ```bash
 npm run build
 ```
-
-## Key scenarios
-
-1. Open the home page and view the cards in the gallery.
-2. Navigate to the photo details page using the "Details" button.
-3. Log in or sign up via the modal window.
-4. Go to the profile, change your name, and upload a photo.
-5. Add a photo from the gallery to your profile.
 
 ## Structure
 
