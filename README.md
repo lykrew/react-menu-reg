@@ -1,51 +1,51 @@
 # PhotoGallery App
 
-Клиентское веб-приложение на React с авторизацией, страницей профиля, галереей и детальной страницей фото.
+A React-based web application featuring authentication, a profile page, a gallery, and a detailed photo view.
 
-## Что реализовано
+## Features Implemented
 
-- Главная страница с галереей
-- Детальная страница фото
-- Страница профиля пользователя
-- UI авторизации и регистрации с подтверждением кода
-- Мокированные API-запросы с асинхронной обработкой
-- Состояния загрузки и ошибок
-- Глобальное состояние через Zustand
-- Навигация через React Router
-- Адаптивная верстка (desktop/tablet/mobile)
-- Локальное хранение данных в localStorage
+- Home page with a gallery
+- Detailed photo view
+- User profile page
+- Authentication and registration UI with code verification
+- Mocked API requests with asynchronous handling
+- Loading and error states
+- Global state management using Zustand
+- Navigation via React Router
+- Responsive layout (desktop/tablet/mobile)
+- Local data storage using localStorage
 
-## Технологии
+## Technologies
 
-- React (функциональные компоненты)
+- React (functional components)
 - JavaScript (ES6+)
 - HTML5, CSS3
 - React Router
 - Zustand
 - Vite
 
-## Запуск проекта
+## Starting the project
 
 ```bash
 npm install
 npm run dev
 ```
 
-Сборка production-версии:
+Building the production version:
 
 ```bash
 npm run build
 ```
 
-## Основные сценарии
+## Key scenarios
 
-1. Открыть главную страницу и просмотреть карточки в галерее.
-2. Перейти в детальную страницу фото по кнопке "Подробнее".
-3. Войти или зарегистрироваться через модальное окно.
-4. Перейти в профиль, сменить имя и загрузить свое фото.
-5. Добавить фото из галереи в профиль.
+1. Open the home page and view the cards in the gallery.
+2. Navigate to the photo details page using the "Details" button.
+3. Log in or sign up via the modal window.
+4. Go to the profile, change your name, and upload a photo.
+5. Add a photo from the gallery to your profile.
 
-## Структура
+## Structure
 
 ```text
 src/
@@ -56,6 +56,6 @@ src/
   store/
 ```
 
-## Примечание
+## Note
 
-Проект использует мок-данные и localStorage вместо реального backend API.
+The project uses mock data and localStorage instead of a real backend API.
